@@ -3,5 +3,55 @@
 }
 
 body {
-  
+  margin: 0;
+  padding: 0;
+  background-color: #c0c86d;
+  cursor: url('./static/cursor.png'), default;
+}
+
+.bg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-gap: 1.5rem 3rem;
+  justify-content: center;
+  place-items: center;
+
+  width: 100vw;
+  height: 100vh;
+  padding: 0 2rem;
+  background: url('./static/background.png') no-repeat;
+}
+
+.hole-container {
+}
+
+.hole {
+  display: grid;
+  place-items: center;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.mole {
+  width: 120%;
+}
+
+.hungry {
+  cursor: url('./static/cursor-worm.png'), default;
+}
+
+.gone {
+  display: none;
+}
+
+@media (min-width: 375px) {
+  .bg {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  } 
+}
+
+@media (min-width: 768px) {
+  .bg {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  } 
 }
