@@ -43,13 +43,17 @@ function Game() {
     return Date.now() + random(500, 2000)
   }
 
+  function getKingStatus() {
+    return Math.random() > 0.9
+  }
+
   function updateNextStatus(mole) {
     switch (mole.status) {
       case STATUS.SAD:
       case STATUS.FED:
         mole.status = STATUS.LEAVING
         mole.next = getLeavingInterval()
-        mole.node.src = './static/mole-leaving.png'
+        mole.node.src = mole.king ? './static/king-mole-leaving.png' : './static/mole-leaving.png'
         mole.node.className = 'mole'
         return
 
@@ -61,15 +65,16 @@ function Game() {
 
       case STATUS.GONE:
         mole.status = STATUS.HUNGRY
+        mole.king = getKingStatus()
         mole.next = getDefaultInterval()
-        mole.node.src = './static/mole-hungry.png'
+        mole.node.src = mole.king ? './static/king-mole-hungry.png' : './static/mole-hungry.png'
         mole.node.className = 'mole hungry'
         break;
       
       case STATUS.HUNGRY:
         mole.status = STATUS.SAD
         mole.next = getDefaultInterval()
-        mole.node.src = './static/mole-sad.png'
+        mole.node.src = mole.king ? './static/king-mole-sad.png' : './static/mole-sad.png'
         mole.node.className = 'mole'
         return
     }
@@ -81,6 +86,11 @@ function Game() {
         updateNextStatus(mole)
       }
     })
+  }
+
+  function calculateScore(king) {
+    if (king) score++
+    score++
   }
 
   function win() {
@@ -101,10 +111,10 @@ function Game() {
 
     mole.status = STATUS.FED
     mole.next = getDefaultInterval()
-    mole.node.src = './static/king-mole-fed.png'
+    mole.node.src = mole.king ? './static/king-mole-fed.png' : './static/mole-fed.png'
     mole.className = 'mole'
 
-    score++
+    calculateScore(mole.king)
 
     if (score >= 10) {
       win()
