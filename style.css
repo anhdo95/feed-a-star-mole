@@ -13,18 +13,33 @@ body {
 
 .bg {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  grid-gap: 1.5rem 3rem;
-  justify-content: center;
-  place-items: center;
+  grid-gap: 2rem;
+  align-content: start;
+  
   width: inherit;
   height: inherit;
-  
   padding: 0 2rem;
   background: url('./static/background.png') no-repeat;
 }
 
+.worm-appearance {
+  overflow: hidden;
+  transition: width 0.4s ease-in;
+}
+
+.worm {
+  width: 90vw;
+}
+
 .hole-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  grid-gap: 1.5rem 3rem;
+  justify-content: center;
+  place-items: center;
+}
+
+.hole {
   display: grid;
   place-items: center;
   width: 80px;
@@ -54,22 +69,22 @@ body {
 }
 
 @media (min-width: 375px) {
-  .bg {
+  .hole-container {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 
-  .hole-container {
+  .hole {
     width: 120px;
     height: 120px;
   }
 }
 
 @media (min-width: 768px) {
-  .bg {
+  .hole-container {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 
-  .hole-container {
+  .hole {
     width: 180px;
     height: 180px;
   }

@@ -1,5 +1,6 @@
 function Game() {
   const NEXT_FRAME_INTERVAL = 100
+  const MAX_SCORE = 10
   const STATUS = {
     SAD: 'SAD',
     HUNGRY: 'HUNGRY',
@@ -10,6 +11,7 @@ function Game() {
 
   const bgElement = document.querySelector('.bg')
   const winElement = document.querySelector('.win')
+  const wormAppearanceElement = document.querySelector('.worm-appearance')
   const moles = getMoles()
   let score = 0
 
@@ -91,6 +93,8 @@ function Game() {
   function calculateScore(king) {
     if (king) score++
     score++
+
+    wormAppearanceElement.style.width = (100 / MAX_SCORE) * score + '%'
   }
 
   function win() {
@@ -99,24 +103,18 @@ function Game() {
   }
 
   function feed(event) {
-    if (
-      !(event.target instanceof HTMLImageElement) ||
-      !event.target.classList.contains("hungry")
-    ) {
-      return
-    }
+    if (!event.target.classList.contains("hungry")) return
 
     const index = event.target.getAttribute('index')
     const mole = moles[index]
 
     mole.status = STATUS.FED
-    mole.next = getDefaultInterval()
     mole.node.src = mole.king ? './static/king-mole-fed.png' : './static/mole-fed.png'
     mole.className = 'mole'
 
     calculateScore(mole.king)
 
-    if (score >= 10) {
+    if (score >= MAX_SCORE) {
       win()
     }
   }
