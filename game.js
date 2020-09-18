@@ -5,6 +5,7 @@ function Game() {
     HUNGRY: 'HUNGRY',
     LEAVING: 'LEAVING',
     GONE: 'GONE',
+    FED: 'FED',
   }
 
   const moles = getMoles()
@@ -12,11 +13,13 @@ function Game() {
   function getMoles() {
     return Array
       .from(document.getElementsByClassName('mole'))
-      .map(function(mole) {
+      .map(function(mole, index) {
+        mole.setAttribute('index', index)
+
         return {
           status: STATUS.SAD,
           next: getDefaultInterval(),
-          node: mole
+          node: mole,
         }
       })
   }
@@ -26,7 +29,7 @@ function Game() {
   }
 
   function getDefaultInterval() {
-    return Date.now() + 500
+    return Date.now() + 1000
   }
 
   function getLeavingInterval() {
@@ -48,14 +51,14 @@ function Game() {
 
       case STATUS.HUNGRY:
         mole.status = STATUS.LEAVING
-        mole.next = getGoneInterval()
+        mole.next = getLeavingInterval()
         mole.node.src = './static/mole-leaving.png'
         mole.node.className = 'mole'
         return
 
       case STATUS.LEAVING:
         mole.status = STATUS.GONE
-        mole.next = getLeavingInterval()
+        mole.next = getGoneInterval()
         mole.node.className = 'mole gone'
         return
 
@@ -76,6 +79,23 @@ function Game() {
     })
   }
 
+  function feed(event) {
+    if (
+      !(event.target instanceof HTMLImageElement) ||
+      !event.target.classList.contains("hungry")
+    ) {
+      return
+    }
+
+    const index = event.target.getAttribute('index')
+    const mole = moles[index]
+
+    mole.status = STATUS.FED
+    mole.next = getDefaultInterval()
+    mole.node.src = './static/king-mole-fed.png'
+    mole.className = 'mole'
+  }
+
   this.start = function() {
     let runAgainAt = Date.now()
 
@@ -91,6 +111,9 @@ function Game() {
     }
 
     nextFrame()
+    document
+      .querySelector('.bg')
+      .addEventListener('click', feed)
   }
 }
 
