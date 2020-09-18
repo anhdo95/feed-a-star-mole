@@ -1,5 +1,5 @@
 function Game() {
-  const NEXT_FRAME_INTERVAL = 1000
+  const NEXT_FRAME_INTERVAL = 100
   const STATUS = {
     SAD: 'SAD',
     HUNGRY: 'HUNGRY',
@@ -21,30 +21,42 @@ function Game() {
       })
   }
 
+  function random(min, max) {
+    return Math.floor(Math.random() * max - min) + min
+  }
+
   function getDefaultInterval() {
-    return Date.now() + 1000
+    return Date.now() + 500
+  }
+
+  function getLeavingInterval() {
+    return Date.now() + random(1000, 15000)
+  }
+
+  function getGoneInterval() {
+    return Date.now() + random(500, 2000)
   }
 
   function updateNextStatus(mole) {
     switch (mole.status) {
       case STATUS.SAD:
-        mole.status = STATUS.LEAVING
+        mole.status = STATUS.HUNGRY
         mole.next = getDefaultInterval()
         mole.node.src = './static/mole-leaving.png'
         return
 
+      case STATUS.HUNGRY:
+        mole.status = STATUS.LEAVING
+        mole.next = getGoneInterval()
+        mole.node.className = 'mole gone'
+        return
+
       case STATUS.LEAVING:
-        mole.status = STATUS.HUNGRY
-        mole.next = getDefaultInterval()
+        mole.status = STATUS.GONE
+        mole.next = getLeavingInterval()
         mole.node.src = './static/mole-hungry.png'
         mole.node.className = 'mole hungry'
         return
-
-      case STATUS.HUNGRY:
-        mole.status = STATUS.GONE
-        mole.next = getDefaultInterval()
-        mole.node.className = 'mole gone'
-        return  
 
       case STATUS.GONE:
         mole.status = STATUS.SAD
@@ -70,7 +82,6 @@ function Game() {
       const now = Date.now()
 
       if (runAgainAt < now) {
-        console.log('now :>> ', now);
         updateMolesStatus(now)
         runAgainAt = now + NEXT_FRAME_INTERVAL
       }
