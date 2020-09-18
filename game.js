@@ -42,20 +42,21 @@ function Game() {
       case STATUS.SAD:
         mole.status = STATUS.HUNGRY
         mole.next = getDefaultInterval()
-        mole.node.src = './static/mole-leaving.png'
+        mole.node.src = './static/mole-hungry.png'
+        mole.node.className = 'mole hungry'
         return
 
       case STATUS.HUNGRY:
         mole.status = STATUS.LEAVING
         mole.next = getGoneInterval()
-        mole.node.className = 'mole gone'
+        mole.node.src = './static/mole-leaving.png'
+        mole.node.className = 'mole'
         return
 
       case STATUS.LEAVING:
         mole.status = STATUS.GONE
         mole.next = getLeavingInterval()
-        mole.node.src = './static/mole-hungry.png'
-        mole.node.className = 'mole hungry'
+        mole.node.className = 'mole gone'
         return
 
       case STATUS.GONE:
